@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Team Campaign Simulator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/cytoscape@3.26.0/dist/cytoscape.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Red Team Logo" class="header-logo me-3">
+                    <div>
+                        <h1 class="mb-0">Red Team Campaign Simulator</h1>
+                        <p class="text-muted mb-0 small">Educational Cybersecurity Attack Modeling Platform</p>
+                    </div>
+                </div>
+                <div class="status-badge">
+                    <span class="badge bg-success"><i class="fas fa-circle-check me-1"></i>System Online</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid main-content">
+        <ul class="nav nav-tabs custom-tabs mb-4" id="mainTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="hosts-tab" data-bs-toggle="tab" data-bs-target="#hosts" type="button">
+                    <i class="fas fa-server me-2"></i>Host Management
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="campaigns-tab" data-bs-toggle="tab" data-bs-target="#campaigns" type="button">
+                    <i class="fas fa-crosshairs me-2"></i>Campaigns
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="visualization-tab" data-bs-toggle="tab" data-bs-target="#visualization" type="button">
+                    <i class="fas fa-project-diagram me-2"></i>Network Visualization
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="logs-tab" data-bs-toggle="tab" data-bs-target="#logs" type="button">
+                    <i class="fas fa-terminal me-2"></i>Attack Logs
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="mainTabContent">
+            <div class="tab-pane fade show active" id="hosts" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Add Host</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="hostForm">
+                                    <input type="hidden" id="hostId" value="">
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Host Name</label>
+                                        <input type="text" class="form-control" id="hostName" placeholder="web-server-01" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">IP Address</label>
+                                        <input type="text" class="form-control" id="hostIp" placeholder="192.168.1.10" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Operating System</label>
+                                        <select class="form-select" id="hostOs" required>
+                                            <option value="">Select OS...</option>
+                                            <option value="Windows Server 2019">Windows Server 2019</option>
+                                            <option value="Windows Server 2016">Windows Server 2016</option>
+                                            <option value="Windows 10">Windows 10</option>
+                                            <option value="Ubuntu 22.04">Ubuntu 22.04</option>
+                                            <option value="Ubuntu 20.04">Ubuntu 20.04</option>
+                                            <option value="CentOS 7">CentOS 7</option>
+                                            <option value="Debian 11">Debian 11</option>
+                                            <option value="macOS">macOS</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Open Ports (comma-separated)</label>
+                                        <input type="text" class="form-control" id="hostPorts" placeholder="22,80,443,3389">
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Vulnerabilities</label>
+                                        <select class="form-select" id="hostVulns" multiple size="5">
+                                            <option value="CVE-2021-44228">CVE-2021-44228 (Log4Shell)</option>
+                                            <option value="CVE-2017-0144">CVE-2017-0144 (EternalBlue)</option>
+                                            <option value="CVE-2014-0160">CVE-2014-0160 (Heartbleed)</option>
+                                            <option value="CVE-2019-0708">CVE-2019-0708 (BlueKeep)</option>
+                                            <option value="CVE-2021-26855">CVE-2021-26855 (ProxyLogon)</option>
+                                            <option value="CVE-2018-7600">CVE-2018-7600 (Drupalgeddon2)</option>
+                                            <option value="CVE-2020-1472">CVE-2020-1472 (Zerologon)</option>
+                                            <option value="CVE-2012-1823">CVE-2012-1823 (PHP-CGI)</option>
+                                            <option value="CVE-2015-1427">CVE-2015-1427 (Elasticsearch)</option>
+                                            <option value="CVE-2019-11510">CVE-2019-11510 (Pulse Secure)</option>
+                                        </select>
+                                        <small class="text-muted">Hold Ctrl/Cmd to select multiple</small>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Business Criticality</label>
+                                        <select class="form-select" id="hostCriticality" required>
+                                            <option value="1">Low</option>
+                                            <option value="2">Medium</option>
+                                            <option value="3" selected>High</option>
+                                            <option value="4">Critical</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-primary" id="hostSubmitBtn">
+                                            <i class="fas fa-save me-2"></i>Add Host
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" id="hostCancelBtn" style="display:none;">
+                                            <i class="fas fa-times me-2"></i>Cancel
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-server me-2"></i>Virtual Network Hosts</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-dark table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>IP Address</th>
+                                                <th>OS</th>
+                                                <th>Ports</th>
+                                                <th>Vulnerabilities</th>
+                                                <th>Criticality</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="hostsTable">
+                                            <tr>
+                                                <td colspan="7" class="text-center text-muted">No hosts configured. Add hosts to begin.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="campaigns" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-rocket me-2"></i>New Campaign</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="campaignForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Campaign Name</label>
+                                        <input type="text" class="form-control" id="campaignName" placeholder="Q1 Pentest Simulation" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Description</label>
+                                        <textarea class="form-control" id="campaignDesc" rows="3" placeholder="Simulated external threat actor targeting web infrastructure..."></textarea>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Initial Target (Optional)</label>
+                                        <select class="form-select" id="campaignInitialHost">
+                                            <option value="">Random</option>
+                                        </select>
+                                        <small class="text-muted">Leave as Random for automated selection</small>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Random Seed (Optional)</label>
+                                        <input type="number" class="form-control" id="campaignSeed" placeholder="Auto-generated">
+                                        <small class="text-muted">Use same seed for reproducible results</small>
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fas fa-play me-2"></i>Create & Execute Campaign
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Campaign Stats</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="campaignStats">
+                                    <div class="stat-item">
+                                        <div class="stat-label">Total Campaigns</div>
+                                        <div class="stat-value" id="totalCampaigns">0</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-label">Active Hosts</div>
+                                        <div class="stat-value" id="totalHosts">0</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-history me-2"></i>Campaign History</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-dark table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Seed</th>
+                                                <th>Status</th>
+                                                <th>Created</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="campaignsTable">
+                                            <tr>
+                                                <td colspan="6" class="text-center text-muted">No campaigns executed yet.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="visualization" role="tabpanel">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-project-diagram me-2"></i>Network Attack Visualization</h5>
+                        <div>
+                            <select class="form-select form-select-sm d-inline-block w-auto" id="vizCampaignSelect">
+                                <option value="">Select Campaign...</option>
+                            </select>
+                            <button class="btn btn-sm btn-primary ms-2" id="refreshVizBtn">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="networkGraph" style="height: 600px; background: #0F0F1E;"></div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="legend">
+                            <span class="legend-item"><span class="legend-color" style="background: #4CAF50;"></span> Uncompromised</span>
+                            <span class="legend-item"><span class="legend-color" style="background: #E94560;"></span> Compromised</span>
+                            <span class="legend-item"><span class="legend-color" style="background: #FF6B35;"></span> Initial Target</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="logs" role="tabpanel">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0"><i class="fas fa-terminal me-2"></i>Attack Timeline & Logs</h5>
+                                <div>
+                                    <select class="form-select form-select-sm d-inline-block w-auto" id="logsCampaignSelect">
+                                        <option value="">Select Campaign...</option>
+                                    </select>
+                                    <button class="btn btn-sm btn-success ms-2" id="downloadReportBtn">
+                                        <i class="fas fa-download"></i> Download Report
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="logsContainer" class="logs-container">
+                                    <div class="text-center text-muted py-5">
+                                        <i class="fas fa-info-circle fa-2x mb-3"></i>
+                                        <p>Select a campaign to view attack logs and timeline</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
