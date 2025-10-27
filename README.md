@@ -60,6 +60,7 @@ It provides visual representations of attack paths, tracks techniques, and gener
 
 ## Clone the repository
 git clone https://github.com/Talhagurmani/Red_Team_Simulator.git
+
 cd Red_Team_Simulator
 
 ##  Create and activate a virtual environment
@@ -123,32 +124,42 @@ pip install flask flask-cors sqlalchemy networkx numpy pillow werkzeug markdown2
 
 <img width="1366" height="625" alt="Screenshot (141)" src="https://github.com/user-attachments/assets/90d7e1a3-ae02-4ab6-b5df-d87f028d438d" />
 
+
 <img width="1344" height="605" alt="Screenshot (140)" src="https://github.com/user-attachments/assets/b77bed4c-f412-4242-b193-bf4b7416a649" />
+
 
 
 ### Campaign Execution
 
 <img width="1366" height="619" alt="Screenshot (142)" src="https://github.com/user-attachments/assets/0f2d058d-dd1a-48c1-a79d-0bce85cb20a3" />
 
+
 <img width="1366" height="624" alt="Screenshot (143)" src="https://github.com/user-attachments/assets/c5db9780-5e64-4830-9d34-c68dff7b95e3" />
+
 
 <img width="1366" height="619" alt="Screenshot (144)" src="https://github.com/user-attachments/assets/be44004f-47ca-4c43-aa05-762e83e546f2" />
 
 
 ### Network Visualization
 
+
 <img width="1366" height="625" alt="Screenshot (145)" src="https://github.com/user-attachments/assets/b5c9a9b6-938a-4123-8ec2-8aacde5eb72d" />
 
+
 ### Attack logs
+
 
 <img width="1366" height="621" alt="Screenshot (149)" src="https://github.com/user-attachments/assets/45a50094-1e68-4dc5-9c93-5243a25eace4" />
 
 
 ### Generated Report
 
+
 <img width="811" height="565" alt="Screenshot (146)" src="https://github.com/user-attachments/assets/5af2c8f3-b57b-4aab-900e-c949fe6507d9" />
 
+
 <img width="813" height="397" alt="Screenshot (147)" src="https://github.com/user-attachments/assets/7fe7f143-732d-47fd-99fc-b80cf630d32d" />
+
 
 <img width="726" height="565" alt="Screenshot (148)" src="https://github.com/user-attachments/assets/53f73a01-4e72-49af-80e1-ea19346e3ffe" />
 
